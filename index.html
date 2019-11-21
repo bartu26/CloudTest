@@ -1,15 +1,305 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<link rel="stylesheet" type="text/css" href="style.css">
-	<title>HRT Static Webpage Example (Alex und Kai) </title>
+    <title>Chatroom</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body {
+            margin-top: 30px;
+        }
+
+        #messageArea {
+            display: none;
+        }
+
+        #messageForm {
+            display: none;
+        }
+        
+    </style>
 </head>
 <body>
-	<h> Hallo Kai</h>
-    <h1> Hallo Alex!</h1>
-	<p>
-The content of the document...
-		<h> TEST 123 </h>
+    <script src="socket.io.js"></script>
+    <script src="socket.io-file-client.js"></script>
+    <script src="app.js"></script>
+    <div id="container" class="container">
+        <div id="userFormArea" class="row">
+            <div class="col-md-12">
+                <form id="userForm">
+                    <div class="form-group">
+                        <label>Enter your Username</label>
+                        <input class="form-control" id="username" />
+                        <br />
+                        <input type="submit" class="btn btn-primary" value="Login" />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="messageArea" class="row">
+            <div class="col-md-4">
+                <div class="well">
+                    <h3>Online Users</h3>
+                    <select class="list-group" id="users" onclick="" multiple></select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="chat" id="chat"></div>
+
+            <form id="messageForm">
+                <div class="form-group">
+                    <label>Enter Message</label>
+                    <textarea class="form-control" id="message"></textarea>
+                    <br />
+                    <input type="submit" class="btn btn-primary" value="Send Message" />
+
+                </div>
+            </form>
+            <form id="FileTransfer">
+                <h5>send file:</h5>
+                <input type="file" id="file" multiple />
+                <input type="submit" value="Upload" />
+            </form>
+        </div>
+    </div>
+
+    <script>
+        var username;
+        var socket = io('http://localhost:3000');
+
+        //var ss = require('socket.io-stream');
+        //var path = require('path');
+
+        var uploader = new SocketIOFileClient(socket);
+        var fileTransfer = document.getElementById('FileTransfer');
+        console.log(fileTransfer);
+
+        $(function () {
+            var $messageForm = $('#messageForm');
+            var $message = $('#message');
+            var $chat = $('#chat');
+            var $messageArea = $('#messageArea');
+            var $userFormArea = $('#userFormArea');
+            var $userForm = $('#userForm');
+            var $users = $('#users');
+            var $username = $('#username');
+            var $disconnected = $('#disconnected');
+            var $FileTransfer = $('#FileTransfer');
+            var $file = $('#file');
+
+
+            uploader.on('start', function (fileInfo) {
+                console.log('Start uploading', fileInfo);
+            });
+            uploader.on('stream', function (fileInfo) {
+                console.log('Streaming... sent ' + fileInfo.sent + ' bytes.');
+            });
+            uploader.on('complete', function (fileInfo) {
+                console.log('Upload Complete', fileInfo);
+            });
+            uploader.on('error', function (err) {
+                console.log('Error!', err);
+            });
+            uploader.on('abort', function (fileInfo) {
+                console.log('Aborted: ', fileInfo);
+            });
+
+
+            //upload of file 
+            fileTransfer.onsubmit = function (ev) {
+                ev.preventDefault();
+
+                var fileEl = document.getElementById('file');
+
+                var test = document.getElementById('FileTransfer');
+
+                var uploadIds = uploader.upload(fileEl, {
+                    
+                    data: { /* Arbitrary data... */ }
+                });
+
+                socket.emit('fetch file', fileEl.value.substring(12), getHighlightedUsers());
+                console.log('File Uploaded');
+                $message.val('');
+                clearSelected();
+            
+                // setTimeout(function() {
+                // uploader.abort(uploadIds[0]);
+                // console.log(uploader.getUploadInfo());
+                // }, 1000);
+            };
+
+            //Button with data for the download is created 
+            socket.on('fetch file', function (data) {
+                var b = document.createElement("BUTTON");
+                b.onclick = function () { downloadFile(data.msg, data.msg) };
+                b.textContent = 'Download: '
+                $chat.append(getTime());
+                $chat.append(b);
+                $chat.append('<p>');
+            })
+
+            function helper() {
+                //<button onclick="helper()" type="button">Download here:</button>' + fileEl.value.substring(12), getHighlightedUsers();
+                console.log("test");
+            }            
+
+            function downloadFile(name, originalFilename) {
+
+                var deferred = $.Deferred();
+
+                // Create stream for file to be streamed to and buffer to save chunks
+                var stream = socket.createStream();
+                fileBuffer = [];
+                fileLength = 0;
+
+                // Emit/Request
+                socket.emit('filedownload', stream, name, function (fileError, fileInfo) {
+                    if (fileError) {
+                        deferred.reject(fileError);
+                    } else {
+
+                        console.log(['File Found!', fileInfo]);
+
+                        // Receive data
+                        stream.on('data', function (chunk) {
+                            fileLength += chunk.length;
+                            var progress = Math.floor((fileLength / fileInfo.size) * 100);
+                            progress = Math.max(progress - 2, 1);
+                            deferred.notify(progress);
+                            fileBuffer.push(chunk);
+                        });
+
+                        stream.on('end', function () {
+
+                            var filedata = new Uint8Array(fileLength),
+                                i = 0;
+
+                            // Loop to fill the final array
+                            fileBuffer.forEach(function (buff) {
+                                for (var j = 0; j < buff.length; j++) {
+                                    filedata[i] = buff[j];
+                                    i++;
+                                }
+                            });
+
+                            deferred.notify(100);
+
+                            // Download file in browser
+                            downloadFileFromBlob([filedata], originalFilename);
+
+                            deferred.resolve();
+                        });
+                    }
+                });
+                return deferred;
+            }
+
+            var downloadFileFromBlob = (function () {
+                var a = document.createElement("a");
+                document.body.appendChild(a);
+                a.style = "display: none";
+                return function (data, fileName) {
+                    var blob = new Blob(data, {
+                        type: "octet/stream"
+                    }),
+                        url = window.URL.createObjectURL(blob);
+                    a.href = url;
+                    a.download = fileName;
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                };
+            }());
+
+
+            //Submits am Message
+            $messageForm.submit(function (e) {
+                e.preventDefault();
+                socket.emit('send message', $message.val(), getHighlightedUsers());
+                console.log('Submitted');
+                $message.val('');
+                clearSelected();
+            });          
+
+            //client receives a new message and prints it into the chat
+            socket.on('new message', function (data) {
+                $chat.append(getTime());
+                $chat.append('<div class ="well"><strong>' + data.user + '</Strong>: ' + data.msg + '</div>');
+            })
+
+            //clients receives notification of connecting users
+            socket.on('user connects', function (data) {
+                $chat.append(getTime());
+                $chat.append('<div class ="well"><strong>' + data.user + ' connected!</Strong></div>');
+            })
+
+            //clients receives notification of disconnecting users
+            socket.on('user disconnects', function (data) {
+                $chat.append(getTime());
+                $chat.append('<div class ="well"><strong>' + data.user + ' disconnected!</Strong></div>');
+            })
+
+            //Client submits his Username 
+            $userForm.submit(function (e) {
+                e.preventDefault();
+                username = $username.val();
+                socket.emit('new user', $username.val(), function (data) {
+                    if (data) {
+                        $userFormArea.hide();
+                        $messageArea.show();
+                        $messageForm.show();
+                        $FileTransfer.show();
+                    }
+                });
+                $username.val('');
+            });
+
+
+            //Selectable list for all users 
+            socket.on('get users', function (data) {
+                var html = '';
+                for (i = 0; i < data.length; i++) {
+                    //inserting options for the select multiple window
+                    html += '<option class="list-group-item">' + data[i] + '</option>';
+                }
+                $users.html(html);
+            });
+        });
+
+        //returns array of highlighted users
+        function getHighlightedUsers() {
+            var values = $('#users').val();
+            //adds own username to the list, to show the sended message in own chat-window
+            if (values !== null && !(values.includes(username))) {
+                values.push(username);
+            }
+            return values;
+        }
+
+        //returns the current time as a String
+        function getTime() {
+            var today = new Date(); 
+            if (today.getSeconds() < 10){
+            	var secs = "0"+ today.getSeconds();
+            }
+            else{
+            	secs = today.getSeconds();
+            }
+            var time = today.getHours() + ":" + today.getMinutes() + ":" + secs;
+            return time;
+        }
+
+        //Clears the current selected highlighted users 
+        function clearSelected(){
+    		var elements = document.getElementById("users").options;
+
+    		for(var i = 0; i < elements.length; i++){
+      		elements[i].selected = false;
+    		}
+  		}
+    </script>
 </body>
 </html>
-

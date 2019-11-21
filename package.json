@@ -1,0 +1,18 @@
+{
+  "name": "iochat",
+  "version": "1.0.0",
+  "description": "Simple chat app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Bernd und Alex",
+  "license": "ISC",
+  "dependencies": {
+    "express": "*",
+    "socket.io": "*",
+    "socket.io-file": "^2.0.31",
+    "socket.io-file-client": "^2.0.2",
+    "socket.io-stream": "^0.9.1"
+  }
+}

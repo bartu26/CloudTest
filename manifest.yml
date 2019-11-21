@@ -1,5 +1,5 @@
+---
 applications:
- - name: one-punch
-   memory: 256M
-   host: one-punch
-   buildpack: staticfile_buildpack
+- name: silly-bose
+  memory: 512M
+  instances: 1
