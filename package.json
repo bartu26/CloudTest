@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "*",
+    "request": "^2.88.0",
     "socket.io": "*",
     "socket.io-file": "^2.0.31",
     "socket.io-file-client": "^2.0.2",
