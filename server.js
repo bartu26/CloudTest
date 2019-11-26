@@ -5,12 +5,12 @@ var io = require('socket.io').listen(server);
 var SocketIOFile = require('socket.io-file');
 var ss = require('socket.io-stream');
 
-const request = require('request');
-request('https://eu-de.functions.cloud.ibm.com/api/v1/web/Alexander.Bartuli%40Student.Reutlingen-University.DE_dev/hrt-demo/identify-and-translate', function (error, response, body) {
-  console.error('error:', error); // Print the error if one occurred
-  console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-  console.log('body:', body); // Print the HTML for the Google homepage.
-});
+//const request = require('request');
+//request('https://eu-de.functions.cloud.ibm.com/api/v1/web/alexander.bartuli%40student.reutlingen-university.de_dev/hrt-demo/identify-and-translate', function (error, response, body) {
+//  console.error('error:', error); // print the error if one occurred
+//  console.log('statuscode:', response && response.statuscode); // print the response status code if a response was received
+//  console.log('body:', body); // print the html for the google homepage.
+//});
 
 
 users = [];
@@ -65,6 +65,26 @@ io.sockets.on('connection', function (socket) {
 
     //send message to every selected user 
     socket.on('send message', function (data, highlightedUsers) {
+
+		//let response = await fetch('https://eu-de.functions.cloud.ibm.com/api/v1/web/Alexander.Bartuli%40Student.Reutlingen-University.DE_dev/hrt-demo/identify-and-translate');
+        //let text = await response.text(); // read response body as text
+        //data = text;  
+
+        const request = require('request');
+        request('https://eu-de.functions.cloud.ibm.com/api/v1/web/Alexander.Bartuli%40Student.Reutlingen-University.DE_dev/hrt-demo/identify-and-translate', function (error, response, body) {
+            console.error('error:', error); // Print the error if one occurred
+            console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+            console.log('body:', body); // Print the HTML for the Google homepage.
+        });
+
+        //let response = fetch('https://eu-de.functions.cloud.ibm.com/api/v1/web/Alexander.Bartuli%40Student.Reutlingen-University.DE_dev/hrt-demo/identify-and-translate');
+
+        //if (response.ok) { // if http-status is 200-299          
+        //    let json = await response.json();
+        //} else {
+        //    alert("http-error: " + response.status);
+        //}
+
         console.log(data);
         var x = highlightedUsers;
         console.log(x);
