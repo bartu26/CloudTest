@@ -68,10 +68,19 @@ io.sockets.on('connection', function (socket) {
 
 		//let response = await fetch('https://eu-de.functions.cloud.ibm.com/api/v1/web/Alexander.Bartuli%40Student.Reutlingen-University.DE_dev/hrt-demo/identify-and-translate');
         //let text = await response.text(); // read response body as text
-        //data = text;  
+        //data = text;
+
+        //const url = 'https://eu-de.functions.cloud.ibm.com/api/v1/web/Alexander.Bartuli%40Student.Reutlingen-University.DE_dev/hrt-demo/identify-and-translate';
+        //const data = {
+        //    name: "Said",
+        //    id:23
+        //}
+        //fetch(url)
+        //    .then(data => { return data.json() })
+        //    .then(res => { console.log(res) })
 
         const request = require('request');
-        request('https://eu-de.functions.cloud.ibm.com/api/v1/web/Alexander.Bartuli%40Student.Reutlingen-University.DE_dev/hrt-demo/identify-and-translate', function (error, response, body) {
+        request('https://eu-de.functions.cloud.ibm.com/api/v1/web/Alexander.Bartuli%40Student.Reutlingen-University.DE_dev/hrt-demo/identify-and-translate/?text = data', function (error, response, body) {
             console.error('error:', error); // Print the error if one occurred
             console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
             console.log('body:', body); // Print the HTML for the Google homepage.
