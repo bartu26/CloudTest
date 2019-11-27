@@ -5,6 +5,11 @@ var io = require('socket.io').listen(server);
 var SocketIOFile = require('socket.io-file');
 var ss = require('socket.io-stream');
 
+const fetch = require("node-fetch");
+
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+
+
 //const request = require('request');
 //request('https://eu-de.functions.cloud.ibm.com/api/v1/web/alexander.bartuli%40student.reutlingen-university.de_dev/hrt-demo/identify-and-translate', function (error, response, body) {
 //  console.error('error:', error); // print the error if one occurred
@@ -66,44 +71,33 @@ io.sockets.on('connection', function (socket) {
     //send message to every selected user 
     socket.on('send message', function (data, highlightedUsers) {
 
-		//let response = await fetch('https://eu-de.functions.cloud.ibm.com/api/v1/web/Alexander.Bartuli%40Student.Reutlingen-University.DE_dev/hrt-demo/identify-and-translate');
-        //let text = await response.text(); // read response body as text
-        //data = text;
+        var originalMessage = data;
+        var url = "https://eu-de.functions.cloud.ibm.com/api/v1/web/Alexander.Bartuli%40Student.Reutlingen-University.DE_dev/hrt-demo/identify-and-translate/?text=" + data;
 
-        //const url = 'https://eu-de.functions.cloud.ibm.com/api/v1/web/Alexander.Bartuli%40Student.Reutlingen-University.DE_dev/hrt-demo/identify-and-translate';
-        //const data = {
-        //    name: "Said",
-        //    id:23
-        //}
-        //fetch(url)
-        //    .then(data => { return data.json() })
-        //    .then(res => { console.log(res) })
 
-        const request = require('request');
-        request('https://eu-de.functions.cloud.ibm.com/api/v1/web/Alexander.Bartuli%40Student.Reutlingen-University.DE_dev/hrt-demo/identify-and-translate/?text= This is a Test ', function (error, response, body) {
-            console.error('error:', error); // Print the error if one occurred
-            console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-            console.log('body:', body); // Print the HTML for the Google homepage.
-        });
-
-        //let response = fetch('https://eu-de.functions.cloud.ibm.com/api/v1/web/Alexander.Bartuli%40Student.Reutlingen-University.DE_dev/hrt-demo/identify-and-translate');
-
-        //if (response.ok) { // if http-status is 200-299          
-        //    let json = await response.json();
-        //} else {
-        //    alert("http-error: " + response.status);
-        //}
-
-        console.log(data);
-        var x = highlightedUsers;
-        console.log(x);
-        if (highlightedUsers == null) {
-            io.sockets.emit('new message', { msg: data, user: socket.username });
-        } else {
-            for (var i = 0; i < x.length; i++) {
-                io.sockets.in(x[i]).emit('new message', { msg: data + " (This message is only visible for the following users: " + x + ")", user: socket.username });
+        const getData = async url => {
+            try {
+   
+                const response = await fetch(url);
+                const json = await response.json();
+                console.log(json);
+                console.log(json.translations);
+                data = json.translations;
+                console.log("Message : " + data);
+                var x = highlightedUsers;
+                console.log("highlighted User: " + x);
+                if (highlightedUsers == null) {
+                    io.sockets.emit('new message', { msg: data, user: socket.username });
+                } else {
+                    for (var i = 0; i < x.length; i++) {
+                        io.sockets.in(x[i]).emit('new message', { msg: data + " (This message is only visible for the following users: " + x + ")", user: socket.username });
+                    }
+                }
+            } catch (error) {
+                console.log(error);
             }
-        }
+        };
+        getData(url);
     });
 
     //Server is offering the download to every selected User

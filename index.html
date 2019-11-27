@@ -8,6 +8,7 @@
     <style>
         body {
             margin-top: 30px;
+            background-color: #E6E6FA;
         }
 
         #messageArea {
@@ -15,6 +16,10 @@
         }
 
         #messageForm {
+            display: none;
+        }
+
+        #FileTransfer {
             display: none;
         }
         
@@ -26,10 +31,10 @@
     <script src="app.js"></script>
     <div id="container" class="container">
         <div id="userFormArea" class="row">
-            <div class="col-md-12">
+            <div class="col-md-12" >
                 <form id="userForm">
                     <div class="form-group">
-                        <label>Enter your Username</label>
+                        <label>Enter a username to join the chatroom</label>
                         <input class="form-control" id="username" />
                         <br />
                         <input type="submit" class="btn btn-primary" value="Login" />
@@ -68,9 +73,9 @@
 
     <script>
         var username;
-        //var socket = io('https://silly-bose.eu-de.mybluemix.net/');
+        var socket = io('https://silly-bose.eu-de.mybluemix.net/');
 		
-        var socket = io('http://localhost:3000');
+        //var socket = io('http://localhost:3000');
 
         //var ss = require('socket.io-stream');
         //var path = require('path');
