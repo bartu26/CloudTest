@@ -44,6 +44,8 @@ app.get('/socket.io-file-client.js', (req, res, next) => {
     return res.sendFile(__dirname + '/node_modules/socket.io-file-client/socket.io-file-client.js');
 });
 
+app.use('/css', express.static(__dirname + '/css'));
+
 io.sockets.on('connection', function (socket) {
     connections.push(socket);
     console.log('Connected: %s sockets connected', connections.length);

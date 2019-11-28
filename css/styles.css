@@ -1,0 +1,16 @@
+body {
+    margin-top: 30px;
+    background-color: #E6E000;
+}
+
+#messageArea {
+    display: none;
+}
+
+#messageForm {
+    display: none;
+}
+
+#FileTransfer {
+    display: none;
+}
