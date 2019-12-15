@@ -4,6 +4,10 @@ body {
     font-size: 20px;
 }
 
+#registrationForm {
+    display: none;
+}
+
 #messageArea {
     display: none;
 }
