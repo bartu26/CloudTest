@@ -74,16 +74,19 @@
 
     <script>
         var username;
-        var socket = io('https://silly-bose.eu-de.mybluemix.net/');
+        //var socket = io('https://silly-bose.eu-de.mybluemix.net/');
 		
-        //var socket = io('http://localhost:3000');
+        var socket = io('http://localhost:3000');
 
         //var ss = require('socket.io-stream');
         //var path = require('path');
 
+        //-------------------------------
+        //initilization for data transfer
         var uploader = new SocketIOFileClient(socket);
         var fileTransfer = document.getElementById('FileTransfer');
         console.log(fileTransfer);
+
 
         $(function () {
             var $messageForm = $('#messageForm');
@@ -157,6 +160,8 @@
                 e.preventDefault();
                 //TODO username und password überprüfen
                 //Username wird an den Server geschickt, dieser verwaltet Liste an Online Users
+                //socket.emit + callback und server.js kann auf cloudant zugreifen
+                //callback speichern evt. true/false
                 username = $loginUsername.val();
                 socket.emit('new user', username, function (data) {
                     if (data) {
@@ -175,6 +180,8 @@
                 //TODO prüfen ob user in db bereits vorhanden ist
                 //db-Anfragen, evt. MongoDB
                 //und Meldung anzeigen bei Erfolg/Misserfolg
+                //socket.emit + callback und server.js kann auf cloudant zugreifen
+                //callback speichern evt. true/false
                 var success = true;
                 if (success) {
                     $registrationForm.animate({ height: "toggle", opacity: "toggle" }, "slow");

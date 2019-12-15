@@ -1,7 +1,40 @@
 var express = require('express');
 var app = express();
-var server = require('http').createServer(app);
-var io = require('socket.io').listen(server);
+var http = require('http').createServer(app).listen(process.env.PORT || 3000);
+var io = require('socket.io').listen(http);
+
+//---------------------
+//---HTTPS-TODO--------
+//---------------------
+
+//var express = require('express');
+//var https = require('https');
+//var fs = require('fs');
+
+//var options = {
+//    key: fs.readFileSync('./server.key'),
+//    cert: fs.readFileSync('./server.cert')
+//};
+
+//var app = express();
+
+//https.createServer(options, app).listen(process.env.PORT || 443);
+
+
+//var http = require('http');
+//http.createServer(app).listen(process.env.PORT || 80);
+
+
+// redirecting to https
+//http.createServer(function (req, res) {
+//    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+//    res.end();
+//}).listen(process.env.PORT || 80);
+
+//var io = require('socket.io').listen(https);
+
+console.log('Server is listening...');
+
 var SocketIOFile = require('socket.io-file');
 var ss = require('socket.io-stream');
 
@@ -10,17 +43,53 @@ const fetch = require("node-fetch");
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 
-//const request = require('request');
-//request('https://eu-de.functions.cloud.ibm.com/api/v1/web/alexander.bartuli%40student.reutlingen-university.de_dev/hrt-demo/identify-and-translate', function (error, response, body) {
-//  console.error('error:', error); // print the error if one occurred
-//  console.log('statuscode:', response && response.statuscode); // print the response status code if a response was received
-//  console.log('body:', body); // print the html for the google homepage.
-//});
+//----------------------
+//connection to cloudant
+const Cloudant = require('cloudant/cloudant');
+
+const vcap = require('./vcap-local.json');
+
+function dbCloudantConnect() {
+    return new Promise((resolve, reject) => {
+        Cloudant({  // eslint-disable-line
+            url: vcap.services.cloudantNoSQLDB.credentials.url
+        }, ((err, cloudant) => {
+            if (err) {
+                logger.error('Connect failure: ' + err.message + ' for Cloudant DB: ' +
+                    appSettings.cloudant_db_name);
+                reject(err);
+            } else {
+                let db = cloudant.use(appSettings.cloudant_db_name);
+                logger.info('Connect success! Connected to DB: ' + appSettings.cloudant_db_name);
+                resolve(db);
+            }
+        }));
+    });
+}
 
 
 users = [];
 connections = [];
 
+app.get('/', function (req, res) {
+    res.sendFile(__dirname + '/index.html');
+});
+
+app.get('/socket.io-file-client.js', (req, res, next) => {
+    return res.sendFile(__dirname + '/node_modules/socket.io-file-client/socket.io-file-client.js');
+});
+
+app.use('/css', express.static(__dirname + '/css'));
+
+app.use(function (req, res, next) {
+    if (req.secure) {
+        // request was via https, so do no special handling
+        next();
+    } else {
+        // request was via http, so redirect to https
+        res.redirect('https://' + req.headers.host + req.url);
+    }
+});
 
 ss(io).on('filedownload', function (stream, name, callback) {
 
@@ -35,16 +104,6 @@ ss(io).on('filedownload', function (stream, name, callback) {
 
 });
 
-
-app.get('/', function (req, res) {
-    res.sendFile(__dirname + '/index.html');
-});
-
-app.get('/socket.io-file-client.js', (req, res, next) => {
-    return res.sendFile(__dirname + '/node_modules/socket.io-file-client/socket.io-file-client.js');
-});
-
-app.use('/css', express.static(__dirname + '/css'));
 
 io.sockets.on('connection', function (socket) {
     connections.push(socket);
@@ -152,7 +211,3 @@ io.sockets.on('connection', function (socket) {
         console.log('Aborted: ', fileInfo);
     });
 });
-
-// Server is all the time listening on Port 3000
-server.listen(process.env.PORT || 3000);
-console.log('Server is running...');
