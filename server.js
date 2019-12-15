@@ -50,7 +50,7 @@ io.sockets.on('connection', function (socket) {
     connections.push(socket);
     console.log('Connected: %s sockets connected', connections.length);
 
-    //new user connects, message to every connected client and usernames are updated 
+    //new user connects, message to every connected client and usernames are updated
     socket.on('new user', function (data, callback) {
         callback(true);
         socket.username = data;
