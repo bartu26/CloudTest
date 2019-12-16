@@ -4,20 +4,17 @@
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <title>Chatroom</title>
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/socket.io-file-client.js"></script>
     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-    <script src="socket.io.js"></script>
-    <script src="socket.io-file-client.js"></script>
-    <script src="app.js"></script>
-
     <div id="container" class="container">
         <div id="userFormArea" class="row">
             <div class="col-md-12">
 
                 <form id="registrationForm">
-                    <input id="regUsername" type="text" placeholder="new username" required/>
-                    <input id="regPassword" type="password" placeholder="new password" required/>
+                    <input id="regUsername" type="text" placeholder="new username" required />
+                    <input id="regPassword" type="password" placeholder="new password" required />
                     <input type="text" placeholder="email address" />
                     <button>create</button>
                     <p class="message">Already registered? <a href="#">Sign In</a></p>
@@ -72,11 +69,12 @@
         </div>
     </div>
 
+
     <script>
         var username;
-        //var socket = io('https://silly-bose.eu-de.mybluemix.net/');
-		
-        var socket = io('http://localhost:3000');
+        var socket = io('https://silly-bose.eu-de.mybluemix.net/');
+
+        //var socket = io('http://localhost:3000');
 
         //var ss = require('socket.io-stream');
         //var path = require('path');
@@ -104,7 +102,7 @@
             var $regUsername = $('#regUsername');
             var $regPassword = $('#regPassword');
 
-            var $users = $('#users');           
+            var $users = $('#users');
             var $disconnected = $('#disconnected');
             var $FileTransfer = $('#FileTransfer');
             var $file = $('#file');
@@ -120,7 +118,7 @@
                 console.log('Submitted');
                 $message.val('');
                 clearSelected();
-            });          
+            });
 
             //client receives a new message and prints it into the chat
             socket.on('new message', function (data) {
@@ -140,7 +138,7 @@
                 $chat.append('<div class ="well"><strong>' + data.user + ' disconnected!</Strong></div>');
             })
 
-            //Selectable list for all users 
+            //Selectable list for all users
             socket.on('get users', function (data) {
                 var html = '';
                 for (i = 0; i < data.length; i++) {
@@ -155,7 +153,7 @@
             //-----------------------------------------------------------------------------------------------------
             //---Login and registration handling-------------------------------------------------------------------
 
-            //client submits login form 
+            //client submits login form
             $loginForm.submit(function (e) {
                 e.preventDefault();
                 //TODO username und password überprüfen
@@ -190,13 +188,13 @@
                     // reset of the values, if registration process terminated
                     this.reset();
                 }
-                
+
             });
 
             // toggeling the view of the login and registration form via an animation
-            $('.message a').click(function(){
+            $('.message a').click(function () {
                 $registrationForm.animate({ height: "toggle", opacity: "toggle" }, "slow");
-                $loginForm.animate({height: "toggle", opacity: "hide"}, "slow");
+                $loginForm.animate({ height: "toggle", opacity: "hide" }, "slow");
             });
 
 
@@ -229,7 +227,7 @@
                 var test = document.getElementById('FileTransfer');
 
                 var uploadIds = uploader.upload(fileEl, {
-                    
+
                     data: { /* Arbitrary data... */ }
                 });
 
@@ -237,14 +235,14 @@
                 console.log('File Uploaded');
                 $message.val('');
                 clearSelected();
-            
+
                 // setTimeout(function() {
                 // uploader.abort(uploadIds[0]);
                 // console.log(uploader.getUploadInfo());
                 // }, 1000);
             };
 
-            //Button with data for the download is created 
+            //Button with data for the download is created
             socket.on('fetch file', function (data) {
                 var b = document.createElement("BUTTON");
                 b.onclick = function () { downloadFile(data.msg, data.msg) };
@@ -257,7 +255,7 @@
             function helper() {
                 //<button onclick="helper()" type="button">Download here:</button>' + fileEl.value.substring(12), getHighlightedUsers();
                 console.log("test");
-            }            
+            }
 
             function downloadFile(name, originalFilename) {
 
@@ -343,25 +341,25 @@
 
         //returns the current time as a String
         function getTime() {
-            var today = new Date(); 
-            if (today.getSeconds() < 10){
-            	var secs = "0"+ today.getSeconds();
+            var today = new Date();
+            if (today.getSeconds() < 10) {
+                var secs = "0" + today.getSeconds();
             }
-            else{
-            	secs = today.getSeconds();
+            else {
+                secs = today.getSeconds();
             }
             var time = today.getHours() + ":" + today.getMinutes() + ":" + secs;
             return time;
         }
 
-        //Clears the current selected highlighted users 
-        function clearSelected(){
-    		var elements = document.getElementById("users").options;
+        //Clears the current selected highlighted users
+        function clearSelected() {
+            var elements = document.getElementById("users").options;
 
-    		for(var i = 0; i < elements.length; i++){
-      		elements[i].selected = false;
-    		}
-  		}
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].selected = false;
+            }
+        }
     </script>
 </body>
 </html>

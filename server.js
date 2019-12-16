@@ -18,14 +18,18 @@ var io = require('socket.io').listen(http);
 
 //var app = express();
 
-//https.createServer(options, app).listen(process.env.PORT || 443);
+////routing if needed?
+//var router = express.Router();
+//app.use('/', router);
+
+//https.createServer(options, app).listen(process.env.PORT || 3000);
 
 
 //var http = require('http');
 //http.createServer(app).listen(process.env.PORT || 80);
 
 
-// redirecting to https
+////redirecting to https
 //http.createServer(function (req, res) {
 //    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
 //    res.end();
@@ -34,6 +38,7 @@ var io = require('socket.io').listen(http);
 //var io = require('socket.io').listen(https);
 
 console.log('Server is listening...');
+
 
 var SocketIOFile = require('socket.io-file');
 var ss = require('socket.io-stream');
@@ -72,24 +77,21 @@ users = [];
 connections = [];
 
 app.get('/', function (req, res) {
-    res.sendFile(__dirname + '/index.html');
+    return res.sendFile(__dirname + '/index.html');
 });
 
 app.get('/socket.io-file-client.js', (req, res, next) => {
     return res.sendFile(__dirname + '/node_modules/socket.io-file-client/socket.io-file-client.js');
 });
 
+//app.get('/socket.io', (req, res, next) => {
+//    return res.sendFile(__dirname + '/node_modules/socket.io');
+//});
+
+//app.use('/node_modules/socket.io', express.static(__dirname + '/node_modules/socket.io'));
+
 app.use('/css', express.static(__dirname + '/css'));
 
-app.use(function (req, res, next) {
-    if (req.secure) {
-        // request was via https, so do no special handling
-        next();
-    } else {
-        // request was via http, so redirect to https
-        res.redirect('https://' + req.headers.host + req.url);
-    }
-});
 
 ss(io).on('filedownload', function (stream, name, callback) {
 
