@@ -1,41 +1,37 @@
-var express = require('express');
-var app = express();
-var http = require('http').createServer(app).listen(process.env.PORT || 3000);
-var io = require('socket.io').listen(http);
+//------------------------------------------------------------------------------
+//old http--------------------------
+//var express = require('express');
+//var app = express();
+//var http = require('http').createServer(app).listen(process.env.PORT || 3000);
+//var io = require('socket.io').listen(http);
 
 //---------------------
 //---HTTPS-TODO--------
 //---------------------
 
-//var express = require('express');
-//var https = require('https');
-//var fs = require('fs');
+var express = require('express');
+var https = require('https');
+var fs = require('fs');
 
-//var options = {
-//    key: fs.readFileSync('./server.key'),
-//    cert: fs.readFileSync('./server.cert')
-//};
+var options = {
+    key: fs.readFileSync('./server.key'),
+    cert: fs.readFileSync('./server.cert')
+};
 
-//var app = express();
+var app = express();
 
-////routing if needed?
-//var router = express.Router();
-//app.use('/', router);
+server = https.createServer(options, app).listen(process.env.PORT || 443);
 
-//https.createServer(options, app).listen(process.env.PORT || 3000);
+//initilization for http redirection
+var http = require('http');
 
+//redirecting to https
+http.createServer(function (req, res) {
+    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+    res.end();
+}).listen(process.env.PORT || 80);
 
-//var http = require('http');
-//http.createServer(app).listen(process.env.PORT || 80);
-
-
-////redirecting to https
-//http.createServer(function (req, res) {
-//    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-//    res.end();
-//}).listen(process.env.PORT || 80);
-
-//var io = require('socket.io').listen(https);
+var io = require('socket.io').listen(server);
 
 console.log('Server is listening...');
 
@@ -84,14 +80,14 @@ app.get('/socket.io-file-client.js', (req, res, next) => {
     return res.sendFile(__dirname + '/node_modules/socket.io-file-client/socket.io-file-client.js');
 });
 
-//app.get('/socket.io', (req, res, next) => {
-//    return res.sendFile(__dirname + '/node_modules/socket.io');
+//app.get('/socket.io.js', (req, res, next) => {
+//    res.set('Content-Type', 'text/html');
+//    return res.sendFile(__dirname + '/node_modules/socket.io/socket.io.js');
 //});
 
 //app.use('/node_modules/socket.io', express.static(__dirname + '/node_modules/socket.io'));
 
 app.use('/css', express.static(__dirname + '/css'));
-
 
 ss(io).on('filedownload', function (stream, name, callback) {
 
