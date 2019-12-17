@@ -1,29 +1,27 @@
 //------------------------------------------------------------------------------
 //old http--------------------------
-//var express = require('express');
-//var app = express();
-//var http = require('http').createServer(app).listen(process.env.PORT || 3000);
-//var io = require('socket.io').listen(http);
+var express = require('express');
+var app = express();
+var http = require('http').createServer(app).listen(process.env.PORT || 3000);
+var io = require('socket.io').listen(http);
 
 //---------------------
 //---HTTPS-TODO--------
 //---------------------
 
-var express = require('express');
-var https = require('https');
-var fs = require('fs');
+//var express = require('express');
+//var https = require('https');
+//var fs = require('fs');
 
-//ssl credentials for https
-var options = {
-    key: fs.readFileSync('./server.key'),
-    cert: fs.readFileSync('./server.cert')
-};
+////ssl credentials for https
+//var options = {
+//    key: fs.readFileSync('./server.key'),
+//    cert: fs.readFileSync('./server.cert')
+//};
 
-var app = express();
+//var app = express();
 
-app.listen(433);
-
-var server = https.createServer(options, app).listen(process.env.PORT || 443);
+//var server = https.createServer(options, app).listen(process.env.PORT || 3000);
 
 ////initilization for http redirection
 //var http = require('http');
@@ -34,7 +32,7 @@ var server = https.createServer(options, app).listen(process.env.PORT || 443);
 //    res.end();
 //}).listen(process.env.PORT || 80);
 
-var io = require('socket.io').listen(server);
+//var io = require('socket.io').listen(server);
 
 
 console.log('Server is listening...');
