@@ -21,7 +21,7 @@ var options = {
 
 var app = express();
 
-var server = https.createServer(options, app).listen(process.env.PORT || 3000);
+var server = https.createServer(options, app).listen(process.env.PORT || 443);
 
 ////initilization for http redirection
 //var http = require('http');
