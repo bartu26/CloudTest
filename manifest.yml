@@ -1,5 +1,5 @@
 ---
 applications:
 - name: silly-bose
-  memory: 2048M
+  memory: 512M
   instances: 1

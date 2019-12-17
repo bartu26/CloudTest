@@ -3,9 +3,6 @@
 <head>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <title>Chatroom</title>
-    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="/socket.io-file-client.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
     <div id="container" class="container">
@@ -69,12 +66,14 @@
         </div>
     </div>
 
-
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/socket.io-file-client.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script>
         var username;
-        var socket = io('https://silly-bose.eu-de.mybluemix.net/');
+        //var socket = io('https://silly-bose.eu-de.mybluemix.net/');
 
-        //var socket = io('https://localhost');
+        var socket = io('https://localhost');
 
         //var ss = require('socket.io-stream');
         //var path = require('path');
