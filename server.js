@@ -20,6 +20,9 @@ var options = {
 
 var app = express();
 
+var router = express.Router();
+app.use('/', router);
+
 var server = https.createServer(options, app).listen(process.env.PORT || 3000);
 
 ////initilization for http redirection
