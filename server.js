@@ -21,27 +21,27 @@ var options = {
 
 var app = express();
 
-var server = https.createServer(options, app).listen(process.env.PORT || 443);
+var server = https.createServer(options, app).listen(process.env.PORT || 8433);
 
-//initilization for http redirection
-var http = require('http');
+////initilization for http redirection
+//var http = require('http');
 
-//redirecting to https
-http.createServer(function (req, res) {
-    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-    res.end();
-}).listen(process.env.PORT || 80);
+////redirecting to https
+//http.createServer(function (req, res) {
+//    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+//    res.end();
+//}).listen(process.env.PORT || 80);
 
 var io = require('socket.io').listen(server);
 
+
 console.log('Server is listening...');
 
-
+//---------------------------
+//initializing of node modules
 var SocketIOFile = require('socket.io-file');
 var ss = require('socket.io-stream');
-
 const fetch = require("node-fetch");
-
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 
