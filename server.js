@@ -13,6 +13,7 @@ var express = require('express');
 var https = require('https');
 var fs = require('fs');
 
+//ssl credentials for https
 var options = {
     key: fs.readFileSync('./server.key'),
     cert: fs.readFileSync('./server.cert')
@@ -20,19 +21,16 @@ var options = {
 
 var app = express();
 
-var router = express.Router();
-app.use('/', router);
+var server = https.createServer(options, app).listen(process.env.PORT || 443);
 
-var server = https.createServer(options, app).listen(process.env.PORT || 3000);
+//initilization for http redirection
+var http = require('http');
 
-////initilization for http redirection
-//var http = require('http');
-
-////redirecting to https
-//http.createServer(function (req, res) {
-//    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-//    res.end();
-//}).listen(process.env.PORT || 80);
+//redirecting to https
+http.createServer(function (req, res) {
+    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+    res.end();
+}).listen(process.env.PORT || 80);
 
 var io = require('socket.io').listen(server);
 
