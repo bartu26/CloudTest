@@ -20,14 +20,7 @@ var options = {
 
 var app = express();
 
-//server = https.createServer(options, app).listen(process.env.PORT || 8443);
-var server = https.createServer({
-    key: fs.readFileSync('./server.key'),
-    cert: fs.readFileSync('./server.cert'),   
-    requestCert: false,
-    rejectUnauthorized: false
-}, app);
-server.listen(8080);
+var server = https.createServer(options, app).listen(process.env.PORT || 3000);
 
 ////initilization for http redirection
 //var http = require('http');
