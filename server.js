@@ -20,7 +20,6 @@ var options = {
 };
 
 var app = express();
-app.listen(443);
 
 var server = https.createServer(options, app).listen(process.env.PORT || 3000);
 
