@@ -22,14 +22,14 @@ var app = express();
 
 server = https.createServer(options, app).listen(process.env.PORT || 443);
 
-//initilization for http redirection
-var http = require('http');
+////initilization for http redirection
+//var http = require('http');
 
-//redirecting to https
-http.createServer(function (req, res) {
-    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-    res.end();
-}).listen(process.env.PORT || 80);
+////redirecting to https
+//http.createServer(function (req, res) {
+//    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+//    res.end();
+//}).listen(process.env.PORT || 80);
 
 var io = require('socket.io').listen(server);
 
