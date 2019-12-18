@@ -164,35 +164,35 @@
             //client submits login form
             $loginForm.submit(function (e) {
                 e.preventDefault();
-                //TODO username und password überprüfen
-                //Username wird an den Server geschickt, dieser verwaltet Liste an Online Users
-                //socket.emit + callback und server.js kann auf cloudant zugreifen
-                //callback speichern evt. true/false
-                username = $loginUsername.val();
-                socket.emit('user login', username, function (callback) {
+                //Function die auf dem Server visualRecognition ausführt und zurückgibt ob es sich um ein Gesicht handelt
+                socket.emit('CheckProfilePicture', $ProfilePicture, function (callback) {
+                    //Wenn das Bild ein gesicht zeigt 
                     if (callback) {
-                        $userFormArea.hide();
-                        $messageArea.show();
-                        $messageForm.show();
-                        $FileTransfer.show();
-                    } else {
-                        //login failed, user nicht vorhanden, bereits eingeloggt, etc.
-                        this.reset();
+                        //TODO username und password überprüfen
+                        //Username wird an den Server geschickt, dieser verwaltet Liste an Online Users
+                        //socket.emit + callback und server.js kann auf cloudant zugreifen
+                        //callback speichern evt. true/false
+                        username = $loginUsername.val();
+                        socket.emit('user login', username, function (callback) {
+                            if (callback) {
+                                $userFormArea.hide();
+                                $messageArea.show();
+                                $messageForm.show();
+                                $FileTransfer.show();
+                            } else {
+                                //login failed, user nicht vorhanden, bereits eingeloggt, etc.
+                                this.reset();
+                            }
+                        });
                     }
-                });
+                    //wenn das Bild kein Gesicht zeigt 
+                    else {
+
+                    }
+                });               
             });
 
-            //Function die auf dem Server visualRecognition ausführt und zurückgibt ob es sich um ein Gesicht handelt
-            socket.emit('CheckProfilePicture', $ProfilePicture, function (callback) {
-                //Wenn das Bild ein gesicht zeigt 
-                if (callback) {
-
-                }
-                //wenn das Bild kein Gesicht zeigt 
-                else {
-
-                }          
-            });
+            
 
             //client submits registration form
             $registrationForm.submit(function (e) {
