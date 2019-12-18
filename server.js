@@ -15,7 +15,9 @@ var visualRecognition = new VisualRecognitionV3({
 
 var url = 'https://watson-developer-cloud.github.io/doc-tutorial-downloads/visual-recognition/640px-IBM_VGA_90X8941_on_PS55.jpg';
 
-
+var params = {
+        url: url,
+    };
 
 
 // Strict-Transport-Security: max-age: 15552000; includeSubDomains
@@ -198,12 +200,6 @@ io.sockets.on('connection', function (socket) {
             callback(false);
         }     
     });
-
-    //socket.on('getPicture', function ()){
-    //    var params = {
-    //        url: url,
-    //    };
-       
 
     //user disconnects, message to every user and usernames are updated 
     socket.on('disconnect', function (data) {
