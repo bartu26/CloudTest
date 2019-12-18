@@ -164,52 +164,52 @@
             //client submits login form
             $loginForm.submit(function (e) {
                 e.preventDefault();
+                //TODO username und password überprüfen
+                //Username wird an den Server geschickt, dieser verwaltet Liste an Online Users
+                //socket.emit + callback und server.js kann auf cloudant zugreifen
+                //callback speichern evt. true/false
+                username = $loginUsername.val();
+                socket.emit('user login', username, function (callback) {
+                    if (callback) {
+                        $userFormArea.hide();
+                        $messageArea.show();
+                        $messageForm.show();
+                        $FileTransfer.show();
+                    } else {
+                        //login failed, user nicht vorhanden, bereits eingeloggt, etc.
+                        this.reset();
+                    }
+                });
+            });
+
+           
+
+            //client submits registration form
+            $registrationForm.submit(function (e) {
+                e.preventDefault();
                 //Function die auf dem Server visualRecognition ausführt und zurückgibt ob es sich um ein Gesicht handelt
                 socket.emit('CheckProfilePicture', $ProfilePicture, function (callback) {
                     //Wenn das Bild ein gesicht zeigt 
                     if (callback) {
-                        //TODO username und password überprüfen
-                        //Username wird an den Server geschickt, dieser verwaltet Liste an Online Users
+                        //TODO prüfen ob user in db bereits vorhanden ist
+                        //db-Anfragen, evt. MongoDB
+                        //und Meldung anzeigen bei Erfolg/Misserfolg
                         //socket.emit + callback und server.js kann auf cloudant zugreifen
-                        //callback speichern evt. true/false
-                        username = $loginUsername.val();
-                        socket.emit('user login', username, function (callback) {
+                        socket.emit("user registration", username, pwd, email, function (callback) {
                             if (callback) {
-                                $userFormArea.hide();
-                                $messageArea.show();
-                                $messageForm.show();
-                                $FileTransfer.show();
+                                $registrationForm.animate({ height: "toggle", opacity: "toggle" }, "slow");
+                                $loginForm.animate({ height: "toggle", opacity: "hide" }, "slow");
                             } else {
-                                //login failed, user nicht vorhanden, bereits eingeloggt, etc.
+                                // reset of the values, if registration process terminated
                                 this.reset();
                             }
-                        });
+                        });               
                     }
                     //wenn das Bild kein Gesicht zeigt 
                     else {
 
                     }
-                });               
-            });
-
-            
-
-            //client submits registration form
-            $registrationForm.submit(function (e) {
-                e.preventDefault();
-                //TODO prüfen ob user in db bereits vorhanden ist
-                //db-Anfragen, evt. MongoDB
-                //und Meldung anzeigen bei Erfolg/Misserfolg
-                //socket.emit + callback und server.js kann auf cloudant zugreifen
-                socket.emit("user registration", username, pwd, email, function (callback) {
-                    if (callback) {                       
-                        $registrationForm.animate({ height: "toggle", opacity: "toggle" }, "slow");
-                        $loginForm.animate({ height: "toggle", opacity: "hide" }, "slow");
-                    } else {
-                        // reset of the values, if registration process terminated
-                        this.reset();
-                    }
-                });               
+                });   
             });
 
             //toggeling the view of the login and registration form via an animation
