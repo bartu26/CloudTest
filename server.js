@@ -182,17 +182,23 @@ io.sockets.on('connection', function (socket) {
         
     });
 
-    //new user attempts a registration
-    socket.on('user registration', function (username, pwd, email, callback) {
 
+    //Server überprüft ob auf dem Bild ein Gesicht zu sehen ist 
+    socket.on('CheckProfilePicture', ProfilePicture, function (callback) {
         visualRecognition.classify(params, function (err, response) {
             if (err) {
                 console.log(err);
+                callback(false)
             } else {
                 console.log(JSON.stringify(response, null, 2))
+                callback(true)
             }
-        });
+        });    
+    });
 
+
+    //new user attempts a registration
+    socket.on('user registration', function (username, pwd, email, callback) {
         if (true) {  //TODO--hier db abfragen ob user bereits registriert
             //TODO--daten in db speichern
             callback(true);
