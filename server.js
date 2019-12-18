@@ -5,6 +5,11 @@ var app = express();
 var http = require('http').createServer(app).listen(process.env.PORT || 3000);
 var io = require('socket.io').listen(http);
 
+
+
+
+// Strict-Transport-Security: max-age: 15552000; includeSubDomains
+
 //---------------------
 //---HTTPS-TODO--------
 //---------------------
@@ -44,7 +49,9 @@ var ss = require('socket.io-stream');
 const fetch = require("node-fetch");
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
-const csp = require(`helmet-csp`)
+const csp = require(`helmet-csp`);
+
+const hsts = require('hsts');
 
 
 //----------------------
@@ -103,6 +110,10 @@ app.use(csp({
         upgradeInsecureRequests: true,
         workerSrc: false  // This is not set.
     }
+}))
+
+app.use(hsts({
+    maxAge: 15552000  // 180 days in seconds
 }))
 
 app.use('/css', express.static(__dirname + '/css'));
