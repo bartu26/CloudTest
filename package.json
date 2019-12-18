@@ -13,6 +13,7 @@
     "express": "*",
     "fetch": "^1.1.0",
     "fs": "0.0.1-security",
+    "helmet": "^3.21.2",
     "helmet-csp": "^2.9.4",
     "hsts": "^2.2.0",
     "mongodb": "^3.4.0",

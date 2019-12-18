@@ -53,6 +53,8 @@ const csp = require(`helmet-csp`);
 
 const hsts = require('hsts');
 
+const helmet = require('helmet')
+
 
 //----------------------
 //connection to cloudant
@@ -96,6 +98,8 @@ app.get('/socket.io-file-client.js', (req, res, next) => {
 //});
 
 //app.use('/node_modules/socket.io', express.static(__dirname + '/node_modules/socket.io'));
+
+app.use(helmet.frameguard());
 
 app.use(csp({
     directives: {
