@@ -47,11 +47,11 @@ var ss = require('socket.io-stream');
 const fetch = require("node-fetch");
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
-const csp = require(`helmet-csp`);
+//const csp = require(`helmet-csp`);
 
-const hsts = require('hsts');
+//const hsts = require('hsts');
 
-const helmet = require('helmet')
+//const helmet = require('helmet')
 
 
 //----------------------
@@ -99,32 +99,32 @@ app.get('/socket.io-file-client.js', (req, res, next) => {
 
 app.use(helmet.frameguard());
 
-app.use(csp({
-    directives: {
-        defaultSrc: ["'self'", 'default.com'],
-        scriptSrc: ["'self'", "'unsafe-inline'"],
-        styleSrc: ['style.com'],
-        fontSrc: ["'self'", 'fonts.com'],
-        imgSrc: ['img.com', 'data:'],
-        sandbox: ['allow-forms', 'allow-scripts'],
-        reportUri: '/report-violation',
-        objectSrc: ["'none'"],
-        upgradeInsecureRequests: true,
-        workerSrc: false  // This is not set.
-    }
-}))
+//app.use(csp({
+//    directives: {
+//        defaultSrc: ["'self'", 'default.com'],
+//        scriptSrc: ["'self'", "'unsafe-inline'"],
+//        styleSrc: ['style.com'],
+//        fontSrc: ["'self'", 'fonts.com'],
+//        imgSrc: ['img.com', 'data:'],
+//        sandbox: ['allow-forms', 'allow-scripts'],
+//        reportUri: '/report-violation',
+//        objectSrc: ["'none'"],
+//        upgradeInsecureRequests: true,
+//        workerSrc: false  // This is not set.
+//    }
+//}))
 
-const hstsMiddleware = hsts({
-    maxAge: 1234000
-})
+//const hstsMiddleware = hsts({
+//    maxAge: 1234000
+//})
 
-app.use((req, res, next) => {
-    if (req.secure) {
-        hstsMiddleware(req, res, next)
-    } else {
-        next()
-    }
-})
+//app.use((req, res, next) => {
+//    if (req.secure) {
+//        hstsMiddleware(req, res, next)
+//    } else {
+//        next()
+//    }
+//})
 
 app.use('/css', express.static(__dirname + '/css'));
 
