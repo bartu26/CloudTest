@@ -184,7 +184,7 @@ io.sockets.on('connection', function (socket) {
 
     //Server überprüft ob auf dem Bild ein Gesicht zu sehen ist 
     socket.on('CheckProfilePicture', function (ProfilePicture, callback) {
-        visualRecognition.classify(params, function (err, response) {
+        visualRecognition.classify(ProfilePicture, function (err, response) {
             if (err) {
                 console.log(err);
                 callback(false)
