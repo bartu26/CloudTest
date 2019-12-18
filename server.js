@@ -112,9 +112,17 @@ app.use(csp({
     }
 }))
 
-app.use(hsts({
-    maxAge: 15552000  // 180 days in seconds
-}))
+const hstsMiddleware = hsts({
+    maxAge: 1234000
+})
+
+app.use((req, res, next) => {
+    if (req.secure) {
+        hstsMiddleware(req, res, next)
+    } else {
+        next()
+    }
+})
 
 app.use('/css', express.static(__dirname + '/css'));
 
