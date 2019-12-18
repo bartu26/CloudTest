@@ -75,7 +75,7 @@
 
         var socket = io('https://silly-bose.eu-de.mybluemix.net');
 
-        //var socket = io('https://localhost:3000');
+        //var socket = io('http://localhost:3000');
 
         //var ss = require('socket.io-stream');
         //var path = require('path');
@@ -115,7 +115,9 @@
             //Client submits a message
             $messageForm.submit(function (e) {
                 e.preventDefault();
-                socket.emit('send message', $message.val(), getHighlightedUsers());
+                var message = $message.val();
+                var highlightedUsers = getHighlightedUsers();
+                socket.emit('send message', message, highlightedUsers);
                 console.log('Submitted');
                 $message.val('');
                 clearSelected();
@@ -162,15 +164,17 @@
                 //socket.emit + callback und server.js kann auf cloudant zugreifen
                 //callback speichern evt. true/false
                 username = $loginUsername.val();
-                socket.emit('new user', username, function (data) {
-                    if (data) {
+                socket.emit('user login', username, function (callback) {
+                    if (callback) {
                         $userFormArea.hide();
                         $messageArea.show();
                         $messageForm.show();
                         $FileTransfer.show();
+                    } else {
+                        //login failed, user nicht vorhanden, bereits eingeloggt, etc.
+                        this.reset();
                     }
                 });
-                $loginUsername.val('');
             });
 
             //client submits registration form
@@ -180,19 +184,18 @@
                 //db-Anfragen, evt. MongoDB
                 //und Meldung anzeigen bei Erfolg/Misserfolg
                 //socket.emit + callback und server.js kann auf cloudant zugreifen
-                //callback speichern evt. true/false
-                var success = true;
-                if (success) {
-                    $registrationForm.animate({ height: "toggle", opacity: "toggle" }, "slow");
-                    $loginForm.animate({ height: "toggle", opacity: "hide" }, "slow");
-                } else {
-                    // reset of the values, if registration process terminated
-                    this.reset();
-                }
-
+                socket.emit("user registration", username, pwd, email, function (callback) {
+                    if (callback) {
+                        $registrationForm.animate({ height: "toggle", opacity: "toggle" }, "slow");
+                        $loginForm.animate({ height: "toggle", opacity: "hide" }, "slow");
+                    } else {
+                        // reset of the values, if registration process terminated
+                        this.reset();
+                    }
+                });               
             });
 
-            // toggeling the view of the login and registration form via an animation
+            //toggeling the view of the login and registration form via an animation
             $('.message a').click(function () {
                 $registrationForm.animate({ height: "toggle", opacity: "toggle" }, "slow");
                 $loginForm.animate({ height: "toggle", opacity: "hide" }, "slow");

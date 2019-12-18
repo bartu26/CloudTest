@@ -10,6 +10,7 @@ var io = require('socket.io').listen(http);
 //---------------------
 
 //var express = require('express');
+//var app = express();
 //var https = require('https');
 //var fs = require('fs');
 
@@ -19,9 +20,9 @@ var io = require('socket.io').listen(http);
 //    cert: fs.readFileSync('./server.cert')
 //};
 
-//var app = express();
-
 //var server = https.createServer(options, app).listen(process.env.PORT || 3000);
+//var io = require('socket.io').listen(server);
+
 
 ////initilization for http redirection
 //var http = require('http');
@@ -31,9 +32,6 @@ var io = require('socket.io').listen(http);
 //    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
 //    res.end();
 //}).listen(process.env.PORT || 80);
-
-//var io = require('socket.io').listen(server);
-
 
 console.log('Server is listening...');
 
@@ -108,15 +106,33 @@ io.sockets.on('connection', function (socket) {
     connections.push(socket);
     console.log('Connected: %s sockets connected', connections.length);
 
-    //new user connects, message to every connected client and usernames are updated
-    socket.on('new user', function (data, callback) {
-        callback(true);
-        socket.username = data;
-        users.push(socket.username);
-        updateUsernames();
-        io.sockets.emit('user connects', { user: socket.username });
-        //every new user joins his 'private' room
-        socket.join(socket.username);
+    //user attempts a login
+    socket.on('user login', function (username, callback) {
+        if (true) { //TODO--hier db abfragen ob user bereits registriert
+            socket.username = username;
+            users.push(socket.username);
+            //update usernames
+            updateUsernames();
+            //notification to every other user logged in
+            io.sockets.emit('user connects', { user: socket.username });
+            //every new user joins his 'private' room
+            socket.join(socket.username);
+            callback(true);
+        } else {
+            callback(false);
+        }
+        
+    });
+
+    //new user attempts a registration
+    socket.on('user registration', function (username, pwd, email, callback) {
+        if (true) {  //TODO--hier db abfragen ob user bereits registriert
+            //TODO--daten in db speichern
+            callback(true);
+        } else {
+            callback(false);
+        }
+        
     });
 
     //user disconnects, message to every user and usernames are updated 
@@ -129,28 +145,23 @@ io.sockets.on('connection', function (socket) {
     });
 
     //send message to every selected user 
-    socket.on('send message', function (data, highlightedUsers) {
-
-        var originalMessage = data;
-        var url = "https://eu-de.functions.cloud.ibm.com/api/v1/web/Alexander.Bartuli%40Student.Reutlingen-University.DE_dev/hrt-demo/identify-and-translate/?text=" + data;
-
-
+    socket.on('send message', function (message, highlightedUsers) {
+        var url = "https://eu-de.functions.cloud.ibm.com/api/v1/web/Alexander.Bartuli%40Student.Reutlingen-University.DE_dev/hrt-demo/identify-and-translate/?text=" + message;
         const getData = async url => {
             try {
-   
                 const response = await fetch(url);
                 const json = await response.json();
                 console.log(json);
                 console.log(json.translations);
-                data = json.translations;
-                console.log("Message : " + data);
+                message = json.translations;
+                console.log("Message : " + message);
                 var x = highlightedUsers;
                 console.log("highlighted User: " + x);
                 if (highlightedUsers == null) {
-                    io.sockets.emit('new message', { msg: data, user: socket.username });
+                    io.sockets.emit('new message', { msg: message, user: socket.username });
                 } else {
                     for (var i = 0; i < x.length; i++) {
-                        io.sockets.in(x[i]).emit('new message', { msg: data + " (This message is only visible for the following users: " + x + ")", user: socket.username });
+                        io.sockets.in(x[i]).emit('new message', { msg: message + " (This message is only visible for the following users: " + x + ")", user: socket.username });
                     }
                 }
             } catch (error) {
