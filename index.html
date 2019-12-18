@@ -191,6 +191,7 @@
                 socket.emit('CheckProfilePicture', $ProfilePicture, function (callback) {
                     //Wenn das Bild ein gesicht zeigt 
                     if (callback) {
+                        console.log("Gesicht wurde erkannt")
                         //TODO prüfen ob user in db bereits vorhanden ist
                         //db-Anfragen, evt. MongoDB
                         //und Meldung anzeigen bei Erfolg/Misserfolg
