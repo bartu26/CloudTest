@@ -182,32 +182,34 @@
                 });
             });
 
+            //Function die auf dem Server visualRecognition ausführt und zurückgibt ob es sich um ein Gesicht handelt
+            socket.emit('CheckProfilePicture', $ProfilePicture, function (callback) {
+                //Wenn das Bild ein gesicht zeigt 
+                if (callback) {
+
+                }
+                //wenn das Bild kein Gesicht zeigt 
+                else {
+
+                }          
+            });
+
             //client submits registration form
             $registrationForm.submit(function (e) {
-                e.preventDefault();              
-                //Function die auf dem Server visualRecognition ausführt und zurückgibt ob es sich um ein Gesicht handelt
-                socket.emit('CheckProfilePicture', $ProfilePicture, function (callback) {
-                    //Wenn das Bild ein gesicht zeigt 
+                e.preventDefault();
+                //TODO prüfen ob user in db bereits vorhanden ist
+                //db-Anfragen, evt. MongoDB
+                //und Meldung anzeigen bei Erfolg/Misserfolg
+                //socket.emit + callback und server.js kann auf cloudant zugreifen
+                socket.emit("user registration", username, pwd, email, function (callback) {
                     if (callback) {                       
-                        socket.emit("user registration", username, pwd, email, function (callback) {
-                        //TODO prüfen ob user in db bereits vorhanden ist
-                        //db-Anfragen, evt. MongoDB
-                        //und Meldung anzeigen bei Erfolg/Misserfolg
-                        //socket.emit + callback und server.js kann auf cloudant zugreifen
-                            if (callback) {
-                                $registrationForm.animate({ height: "toggle", opacity: "toggle" }, "slow");
-                                $loginForm.animate({ height: "toggle", opacity: "hide" }, "slow");
-                            } else {
-                                // reset of the values, if registration process terminated
-                                this.reset();
-                            }
-                        });              
+                        $registrationForm.animate({ height: "toggle", opacity: "toggle" }, "slow");
+                        $loginForm.animate({ height: "toggle", opacity: "hide" }, "slow");
+                    } else {
+                        // reset of the values, if registration process terminated
+                        this.reset();
                     }
-                    //wenn das Bild kein Gesicht zeigt 
-                    else {
-
-                    }
-                });   
+                });               
             });
 
             //toggeling the view of the login and registration form via an animation
