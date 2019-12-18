@@ -44,6 +44,8 @@ var ss = require('socket.io-stream');
 const fetch = require("node-fetch");
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
+const csp = require(`helmet-csp`)
+
 
 //----------------------
 //connection to cloudant
@@ -88,10 +90,12 @@ app.get('/socket.io-file-client.js', (req, res, next) => {
 
 //app.use('/node_modules/socket.io', express.static(__dirname + '/node_modules/socket.io'));
 
-app.use(function (req, res, next) {
-    res.setHeader("Content-Security-Policy", "script-src 'self' https://apis.google.com");
-    return next();
-});
+app.use(csp({
+    directives: {
+        defaultSrc: [`'self'`],
+        imgSrc: [`'self'`, `imgur.com`]
+    }
+}))
 
 app.use('/css', express.static(__dirname + '/css'));
 
