@@ -103,6 +103,7 @@
             var $loginUsername = $('#loginUsername');
             var $loginPassword = $('#loginPassword');
 
+            var $ProfilePicture = $('#ProfilePicture'); 
             var $registrationForm = $('#registrationForm');
             var $regUsername = $('#regUsername');
             var $regPassword = $('#regPassword');
@@ -188,8 +189,8 @@
                 //db-Anfragen, evt. MongoDB
                 //und Meldung anzeigen bei Erfolg/Misserfolg
                 //socket.emit + callback und server.js kann auf cloudant zugreifen
-                socket.emit("user registration", username, pwd, email, function (callback) {
-                    if (callback) {
+                socket.emit("user registration", username, pwd, email, ProfilePicture, function (callback) {
+                    if (callback) {                       
                         $registrationForm.animate({ height: "toggle", opacity: "toggle" }, "slow");
                         $loginForm.animate({ height: "toggle", opacity: "hide" }, "slow");
                     } else {

@@ -15,17 +15,7 @@ var visualRecognition = new VisualRecognitionV3({
 
 var url = 'https://watson-developer-cloud.github.io/doc-tutorial-downloads/visual-recognition/640px-IBM_VGA_90X8941_on_PS55.jpg';
 
-var params = {
-    url: url,
-};
 
-visualRecognition.classify(params, function (err, response) {
-    if (err) {
-        console.log(err);
-    } else {
-        console.log(JSON.stringify(response, null, 2))
-    }
-});
 
 
 // Strict-Transport-Security: max-age: 15552000; includeSubDomains
@@ -191,15 +181,28 @@ io.sockets.on('connection', function (socket) {
     });
 
     //new user attempts a registration
-    socket.on('user registration', function (username, pwd, email, callback) {
+    socket.on('user registration', function (username, pwd, email, ProfilePicture, callback) {
         if (true) {  //TODO--hier db abfragen ob user bereits registriert
             //TODO--daten in db speichern
             callback(true);
         } else {
             callback(false);
-        }
-        
+        }     
     });
+
+    //socket.on('getPicture', function ()){
+    //    var params = {
+    //        url: url,
+    //    };
+
+        visualRecognition.classify(params, function (err, response) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(JSON.stringify(response, null, 2))
+            }
+        });
+    }
 
     //user disconnects, message to every user and usernames are updated 
     socket.on('disconnect', function (data) {
