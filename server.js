@@ -5,6 +5,28 @@ var app = express();
 var http = require('http').createServer(app).listen(process.env.PORT || 3000);
 var io = require('socket.io').listen(http);
 
+var VisualRecognitionV3 = require('watson-developer-cloud/visual-recognition/v3');
+var fs = require('fs');
+
+var visualRecognition = new VisualRecognitionV3({
+    version: '2018-03-19',
+    iam_apikey: '7cLYSh-2k8-pS0K7omgfaQIb_i1smKrBme3Omv3Nr_Kh'
+});
+
+var url = 'https://watson-developer-cloud.github.io/doc-tutorial-downloads/visual-recognition/640px-IBM_VGA_90X8941_on_PS55.jpg';
+
+var params = {
+    url: url,
+};
+
+visualRecognition.classify(params, function (err, response) {
+    if (err) {
+        console.log(err);
+    } else {
+        console.log(JSON.stringify(response, null, 2))
+    }
+});
+
 
 // Strict-Transport-Security: max-age: 15552000; includeSubDomains
 
