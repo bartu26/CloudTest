@@ -178,8 +178,7 @@ io.sockets.on('connection', function (socket) {
             callback(true);
         } else {
             callback(false);
-        }
-        
+        }      
     });
 
 
