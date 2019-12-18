@@ -184,18 +184,18 @@ io.sockets.on('connection', function (socket) {
 
 
     //Server überprüft ob auf dem Bild ein Gesicht zu sehen ist 
-    //socket.on('CheckProfilePicture', ProfilePicture, function (callback) {
-    //    visualRecognition.classify(params, function (err, response) {
-    //        if (err) {
-    //            console.log(err);
-    //            callback(false)
-    //        } else
-    //        {
-    //            console.log(JSON.stringify(response, null, 2))
-    //            callback(true)
-    //        }
-    //    });    
-    //});
+    socket.on('CheckProfilePicture', function (ProfilePicture, callback) {
+        visualRecognition.classify(params, function (err, response) {
+            if (err) {
+                console.log(err);
+                callback(false)
+            } else
+            {
+                console.log(JSON.stringify(response, null, 2))
+                callback(true)
+            }
+        });    
+    });
 
 
     //new user attempts a registration
