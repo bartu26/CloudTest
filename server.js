@@ -181,7 +181,16 @@ io.sockets.on('connection', function (socket) {
     });
 
     //new user attempts a registration
-    socket.on('user registration', function (username, pwd, email, ProfilePicture, callback) {
+    socket.on('user registration', function (username, pwd, email, callback) {
+
+        visualRecognition.classify(params, function (err, response) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(JSON.stringify(response, null, 2))
+            }
+        });
+
         if (true) {  //TODO--hier db abfragen ob user bereits registriert
             //TODO--daten in db speichern
             callback(true);
@@ -194,15 +203,7 @@ io.sockets.on('connection', function (socket) {
     //    var params = {
     //        url: url,
     //    };
-
-        visualRecognition.classify(params, function (err, response) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(JSON.stringify(response, null, 2))
-            }
-        });
-    }
+       
 
     //user disconnects, message to every user and usernames are updated 
     socket.on('disconnect', function (data) {

@@ -189,7 +189,7 @@
                 //db-Anfragen, evt. MongoDB
                 //und Meldung anzeigen bei Erfolg/Misserfolg
                 //socket.emit + callback und server.js kann auf cloudant zugreifen
-                socket.emit("user registration", username, pwd, email, ProfilePicture, function (callback) {
+                socket.emit("user registration", username, pwd, email, function (callback) {
                     if (callback) {                       
                         $registrationForm.animate({ height: "toggle", opacity: "toggle" }, "slow");
                         $loginForm.animate({ height: "toggle", opacity: "hide" }, "slow");
