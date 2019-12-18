@@ -182,22 +182,21 @@
                 });
             });
 
-            //Function die auf dem Server visualRecognition ausführt und zurückgibt ob es sich um ein Gesicht handelt
-            socket.emit('CheckProfilePicture', $ProfilePicture, function (callback) {
-                //Wenn das Bild ein gesicht zeigt 
-                if (callback) {
-
-                }
-                //wenn das Bild kein Gesicht zeigt 
-                else {
-
-                }          
-            });
-
             //client submits registration form
             $registrationForm.submit(function (e) {
-                e.preventDefault();
-                //TODO prüfen ob user in db bereits vorhanden ist
+                e.preventDefault();              
+                //Function die auf dem Server visualRecognition ausführt und zurückgibt ob es sich um ein Gesicht handelt
+                socket.emit('CheckProfilePicture', $ProfilePicture, function (callback) {
+                    //Wenn das Bild ein gesicht zeigt 
+                    if (callback) {
+
+                    }
+                    //wenn das Bild kein Gesicht zeigt 
+                    else {
+
+                    }
+                });
+                 //TODO prüfen ob user in db bereits vorhanden ist
                 //db-Anfragen, evt. MongoDB
                 //und Meldung anzeigen bei Erfolg/Misserfolg
                 //socket.emit + callback und server.js kann auf cloudant zugreifen
