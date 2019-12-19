@@ -1,9 +1,9 @@
 //------------------------------------------------------------------------------
 //old http--------------------------
-var express = require('express');
-var app = express();
-var http = require('http').createServer(app).listen(process.env.PORT || 3000);
-var io = require('socket.io').listen(http);
+//var express = require('express');
+//var app = express();
+//var http = require('http').createServer(app).listen(process.env.PORT || 3000);
+//var io = require('socket.io').listen(http);
 
 var VisualRecognitionV3 = require('watson-developer-cloud/visual-recognition/v3');
 //var fs = require('fs');
@@ -25,20 +25,26 @@ var params = {
 //---------------------
 //---HTTPS-TODO--------
 //---------------------
-
-//var express = require('express');
-//var app = express();
-//var https = require('https');
-//var fs = require('fs');
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
 
 ////ssl credentials for https
-//var options = {
-//    key: fs.readFileSync('./server.key'),
-//    cert: fs.readFileSync('./server.cert')
-//};
+var options = {
+    key: fs.readFileSync('./server.key'),
+    cert: fs.readFileSync('./server.cert')
+};
 
-//var server = https.createServer(options, app).listen(process.env.PORT || 3000);
-//var io = require('socket.io').listen(server);
+var express = require('express');
+var app = express();
+
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(options, app)
+
+httpServer.listen(8080);
+httpsServer.listen(8443);
+
+var io = require('socket.io').listen(server);
 
 
 ////initilization for http redirection
