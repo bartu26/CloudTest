@@ -38,10 +38,10 @@ var options = {
 var express = require('express');
 var app = express();
 
-var httpServer = http.createServer(app);
+//var httpServer = http.createServer(app);
 var httpsServer = https.createServer(options, app)
 
-httpServer.listen(process.env.PORT || 80);
+//httpServer.listen(process.env.PORT || 80);
 httpsServer.listen(process.env.PORT || 443);
 
 var io = require('socket.io').listen(httpsServer);
