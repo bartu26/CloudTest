@@ -33,7 +33,9 @@ var https = require('https');
 var options = {
     key: fs.readFileSync('key.pem', 'utf8'),
     cert: fs.readFileSync('key-cert.pem', 'utf8'),
-    secure:true
+    secure: true,
+    reconnect: true,
+    rejectUnauthorized: false
 };
 
 var express = require('express');
