@@ -42,7 +42,7 @@ var app = express();
 var httpsServer = https.createServer(options, app)
 
 //httpServer.listen(process.env.PORT || 80);
-httpsServer.listen(process.env.PORT || 4443);
+httpsServer.listen(process.env.PORT || 3000);
 
 var io = require('socket.io').listen(httpsServer);
 
