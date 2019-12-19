@@ -101,7 +101,7 @@ users = [];
 connections = [];
 
 app.get('/', function (req, res) {
-    return res.sendFile(__dirname + 'index.html');
+    return res.sendFile(__dirname + '/index.html');
 });
 
 app.get('/socket.io-file-client.js', (req, res, next) => {
