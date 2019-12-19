@@ -38,6 +38,8 @@ var options = {
 var express = require('express');
 var app = express();
 
+app.listen(443);
+
 //var httpServer = http.createServer(app);
 var httpsServer = https.createServer(options, app)
 
@@ -101,7 +103,6 @@ users = [];
 connections = [];
 
 app.get('/', function (req, res) {
-    res.writeHead(301);
     return res.sendFile(__dirname + '/index.html');
 });
 
