@@ -17,7 +17,19 @@ var url = 'https://watson-developer-cloud.github.io/doc-tutorial-downloads/visua
 
 var params = {
         url: url,
-    };
+};
+
+const csp = require('express-csp-header');
+app.use(csp({
+    policies: {
+        'default-src': [csp.SELF],
+        'script-src': [csp.SELF, csp.INLINE, 'somehost.com'],
+        'style-src': [csp.SELF, 'mystyles.net'],
+        'img-src': ['data:', 'images.com'],
+        'worker-src': [csp.NONE],
+        'block-all-mixed-content': true
+    }
+}));
 
 
 // Strict-Transport-Security: max-age: 15552000; includeSubDomains
