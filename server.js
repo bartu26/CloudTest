@@ -23,7 +23,7 @@ const csp = require('express-csp-header');
 app.use(csp({
     policies: {
         //'default-src': [csp.SELF, 'https://silly-bose.eu-de.mybluemix.net/'],
-        //'script-src': [csp.SELF, 'https://silly-bose.eu-de.mybluemix.net/', 'https://code.jquery.com/jquery-latest.min.js', '/socket.io-file-client.js' , '/socket.io/socket.io.js'],
+        'script-src': [csp.SELF, 'https://silly-bose.eu-de.mybluemix.net/', 'https://code.jquery.com/jquery-latest.min.js', '/socket.io-file-client.js' , '/socket.io/socket.io.js']
         //'style-src': [csp.SELF,'https://silly-bose.eu-de.mybluemix.net/'],
         //'worker-src': [csp.SELF,'https://silly-bose.eu-de.mybluemix.net/'],
         //'block-all-mixed-content': true
