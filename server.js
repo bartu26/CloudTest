@@ -41,8 +41,8 @@ var app = express();
 var httpServer = http.createServer(app);
 var httpsServer = https.createServer(options, app)
 
-httpServer.listen(process.env.PORT || 8080);
-httpsServer.listen(process.env.PORT || 8443);
+httpServer.listen(process.env.PORT || 80);
+httpsServer.listen(process.env.PORT || 443);
 
 var io = require('socket.io').listen(httpsServer);
 
