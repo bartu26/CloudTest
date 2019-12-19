@@ -37,22 +37,20 @@ var options = {
     cert: fs.readFileSync('./key-cert.pem')
 };
 
-app.get('/', function (req, res) {
-    return res.sendFile(__dirname + '/index.html');
-});
+app.listen(8000);
 
-var server = https.createServer(options, app).listen(process.env.PORT || 3000);
+var server = https.createServer(options, app).listen(process.env.PORT || 8080);
 var io = require('socket.io').listen(server);
 
 
-//initilization for http redirection
-var http = require('http');
+////initilization for http redirection
+//var http = require('http');
 
-//redirecting to https
-http.createServer(function (req, res) {
-    res.writeHead(3000, { "Location": "https://" + req.headers['host'] + req.url });
-    res.end();
-}).listen(process.env.PORT || 80);
+////redirecting to https
+//http.createServer(function (req, res) {
+//    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+//    res.end();
+//}).listen(process.env.PORT || 80);
 
 console.log('Server is listening...');
 
@@ -98,16 +96,23 @@ function dbCloudantConnect() {
 users = [];
 connections = [];
 
+app.use((req, res) => {
+    res.writeHead(200);
+    res.end("hello world\n");
+});
 
+app.get('/', function (req, res) {
+    return res.sendFile(__dirname + '/index.html');
+});
 
 app.get('/socket.io-file-client.js', (req, res, next) => {
     return res.sendFile(__dirname + '/node_modules/socket.io-file-client/socket.io-file-client.js');
 });
 
-//app.get('/socket.io.js', (req, res, next) => {
-//    res.set('Content-Type', 'text/html');
-//    return res.sendFile(__dirname + '/node_modules/socket.io/socket.io.js');
-//});
+app.get('/socket.io.js', (req, res, next) => {
+    res.set('Content-Type', 'text/html');
+    return res.sendFile(__dirname + '/node_modules/socket.io/socket.io.js');
+});
 
 //app.use('/node_modules/socket.io', express.static(__dirname + '/node_modules/socket.io'));
 
