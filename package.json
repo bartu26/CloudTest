@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Simple chat app",
   "main": "server.js",
+  "engines": {
+    "node": "13.5.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,7 +21,6 @@
     "helmet-csp": "^2.9.4",
     "hsts": "^2.2.0",
     "mongodb": "^3.4.0",
-    "node": "13.5.0",
     "node-fetch": "^2.6.0",
     "nodemon": "^2.0.2",
     "request": "^2.88.0",
@@ -28,5 +30,8 @@
     "socket.io-stream": "^0.9.1",
     "watson-developer-cloud": "^4.0.1",
     "xmlhttprequest": "^1.8.0"
+  },
+  "jshint.options": {
+    "esversion": 6
   }
 }

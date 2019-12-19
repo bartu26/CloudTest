@@ -1,9 +1,9 @@
 //------------------------------------------------------------------------------
 //old http--------------------------
-//var express = require('express');
-//var app = express();
-//var http = require('http').createServer(app).listen(process.env.PORT || 3000);
-//var io = require('socket.io').listen(http);
+var express = require('express');
+var app = express();
+var http = require('http').createServer(app).listen(process.env.PORT || 3000);
+var io = require('socket.io').listen(http);
 
 var VisualRecognitionV3 = require('watson-developer-cloud/visual-recognition/v3');
 //var fs = require('fs');
@@ -26,19 +26,19 @@ var params = {
 //---HTTPS-TODO--------
 //---------------------
 
-var express = require('express');
-var app = express();
-var https = require('https');
-var fs = require('fs');
+//var express = require('express');
+//var app = express();
+//var https = require('https');
+//var fs = require('fs');
 
-//ssl credentials for https
-var options = {
-    key: fs.readFileSync('./key.pem'),
-    cert: fs.readFileSync('./key-cert.pem')
-};
+////ssl credentials for https
+//var options = {
+//    key: fs.readFileSync('./server.key'),
+//    cert: fs.readFileSync('./server.cert')
+//};
 
-var server = https.createServer(options, app).listen(process.env.PORT || 3000);
-var io = require('socket.io').listen(server);
+//var server = https.createServer(options, app).listen(process.env.PORT || 3000);
+//var io = require('socket.io').listen(server);
 
 
 ////initilization for http redirection
@@ -56,7 +56,7 @@ console.log('Server is listening...');
 //initializing of node modules
 var SocketIOFile = require('socket.io-file');
 var ss = require('socket.io-stream');
-const fetch = require("node-fetch");
+var fetch = require("node-fetch");
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 //const csp = require(`helmet-csp`);
@@ -68,9 +68,9 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 //----------------------
 //connection to cloudant
-const Cloudant = require('cloudant/cloudant');
+var Cloudant = require('cloudant/cloudant');
 
-const vcap = require('./vcap-local.json');
+var vcap = require('./vcap-local.json');
 
 function dbCloudantConnect() {
     return new Promise((resolve, reject) => {
@@ -82,7 +82,7 @@ function dbCloudantConnect() {
                     appSettings.cloudant_db_name);
                 reject(err);
             } else {
-                let db = cloudant.use(appSettings.cloudant_db_name);
+                var db = cloudant.use(appSettings.cloudant_db_name);
                 logger.info('Connect success! Connected to DB: ' + appSettings.cloudant_db_name);
                 resolve(db);
             }
@@ -102,10 +102,10 @@ app.get('/socket.io-file-client.js', (req, res, next) => {
     return res.sendFile(__dirname + '/node_modules/socket.io-file-client/socket.io-file-client.js');
 });
 
-app.get('/socket.io.js', (req, res, next) => {
-    res.set('Content-Type', 'text/html');
-    return res.sendFile(__dirname + '/node_modules/socket.io/socket.io.js');
-});
+//app.get('/socket.io.js', (req, res, next) => {
+//    res.set('Content-Type', 'text/html');
+//    return res.sendFile(__dirname + '/node_modules/socket.io/socket.io.js');
+//});
 
 //app.use('/node_modules/socket.io', express.static(__dirname + '/node_modules/socket.io'));
 
@@ -187,11 +187,11 @@ io.sockets.on('connection', function (socket) {
         visualRecognition.classify(param, function (err, response) {
             if (err) {
                 console.log(err);
-                callback(false)
+                callback(false);
             } else
             {
-                console.log(JSON.stringify(response, null, 2))
-                callback(true)
+                console.log(JSON.stringify(response, null, 2));
+                callback(true);
             }
         });    
     });
@@ -219,10 +219,10 @@ io.sockets.on('connection', function (socket) {
     //send message to every selected user 
     socket.on('send message', function (message, highlightedUsers) {
         var url = "https://eu-de.functions.cloud.ibm.com/api/v1/web/Alexander.Bartuli%40Student.Reutlingen-University.DE_dev/hrt-demo/identify-and-translate/?text=" + message;
-        const getData = async url => {
+        var getData = async url => {
             try {
-                const response = await fetch(url);
-                const json = await response.json();
+                var response = await fetch(url);
+                var json = await response.json();
                 console.log(json);
                 console.log(json.translations);
                 message = json.translations;
