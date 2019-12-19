@@ -33,8 +33,8 @@ var fs = require('fs');
 
 //ssl credentials for https
 var options = {
-    key: fs.readFileSync('./server.key'),
-    cert: fs.readFileSync('./server.cert')
+    key: fs.readFileSync('./key.pem'),
+    cert: fs.readFileSync('./key-cert.pem')
 };
 
 app.get('/', function (req, res) {
