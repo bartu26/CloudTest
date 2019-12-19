@@ -42,9 +42,9 @@ var httpServer = http.createServer(app);
 var httpsServer = https.createServer(options, app)
 
 httpServer.listen(process.env.PORT || 80);
-httpsServer.listen(process.env.PORT || 3000);
+httpsServer.listen(process.env.PORT || 8080);
 
-var io = require('socket.io').listen(httpsServer, {secure: true});
+var io = require('socket.io').listen(httpsServer);
 
 
 ////initilization for http redirection
