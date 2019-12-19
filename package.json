@@ -17,6 +17,7 @@
     "helmet-csp": "^2.9.4",
     "hsts": "^2.2.0",
     "mongodb": "^3.4.0",
+    "node": "^13.5.0",
     "node-fetch": "^2.6.0",
     "nodemon": "^2.0.2",
     "request": "^2.88.0",

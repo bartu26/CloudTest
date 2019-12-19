@@ -1,12 +1,12 @@
 //------------------------------------------------------------------------------
 //old http--------------------------
-var express = require('express');
-var app = express();
-var http = require('http').createServer(app).listen(process.env.PORT || 3000);
-var io = require('socket.io').listen(http);
+//var express = require('express');
+//var app = express();
+//var http = require('http').createServer(app).listen(process.env.PORT || 3000);
+//var io = require('socket.io').listen(http);
 
 var VisualRecognitionV3 = require('watson-developer-cloud/visual-recognition/v3');
-var fs = require('fs');
+//var fs = require('fs');
 
 var visualRecognition = new VisualRecognitionV3({
     version: '2018-03-19',
@@ -26,29 +26,33 @@ var params = {
 //---HTTPS-TODO--------
 //---------------------
 
-//var express = require('express');
-//var app = express();
-//var https = require('https');
-//var fs = require('fs');
+var express = require('express');
+var app = express();
+var https = require('https');
+var fs = require('fs');
 
-////ssl credentials for https
-//var options = {
-//    key: fs.readFileSync('./server.key'),
-//    cert: fs.readFileSync('./server.cert')
-//};
+//ssl credentials for https
+var options = {
+    key: fs.readFileSync('./server.key'),
+    cert: fs.readFileSync('./server.cert')
+};
 
-//var server = https.createServer(options, app).listen(process.env.PORT || 3000);
-//var io = require('socket.io').listen(server);
+app.get('/', function (req, res) {
+    return res.sendFile(__dirname + '/index.html');
+});
+
+var server = https.createServer(options, app).listen(process.env.PORT || 443);
+var io = require('socket.io').listen(server);
 
 
-////initilization for http redirection
-//var http = require('http');
+//initilization for http redirection
+var http = require('http');
 
-////redirecting to https
-//http.createServer(function (req, res) {
-//    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-//    res.end();
-//}).listen(process.env.PORT || 80);
+//redirecting to https
+http.createServer(function (req, res) {
+    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+    res.end();
+}).listen(process.env.PORT || 80);
 
 console.log('Server is listening...');
 
@@ -94,9 +98,7 @@ function dbCloudantConnect() {
 users = [];
 connections = [];
 
-app.get('/', function (req, res) {
-    return res.sendFile(__dirname + '/index.html');
-});
+
 
 app.get('/socket.io-file-client.js', (req, res, next) => {
     return res.sendFile(__dirname + '/node_modules/socket.io-file-client/socket.io-file-client.js');
