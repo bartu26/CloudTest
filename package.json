@@ -9,6 +9,7 @@
   "author": "Bernd und Alex",
   "license": "ISC",
   "dependencies": {
+    "node": "13.5.0",
     "cloudant": "^1.10.0-NOTICE",
     "express": "*",
     "fetch": "^1.1.0",
