@@ -31,8 +31,8 @@ var https = require('https');
 
 ////ssl credentials for https
 var options = {
-    key: fs.readFileSync('./server.key'),
-    cert: fs.readFileSync('./server.cert')
+    key: fs.readFileSync('./server.key', 'utf8'),
+    cert: fs.readFileSync('./server.cert', 'utf8')
 };
 
 var express = require('express');
@@ -41,10 +41,10 @@ var app = express();
 var httpServer = http.createServer(app);
 var httpsServer = https.createServer(options, app)
 
-httpServer.listen(8080);
-httpsServer.listen(8443);
+httpServer.listen(process.env.PORT || 8080);
+httpsServer.listen(process.env.PORT || 8443);
 
-var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(httpsServer);
 
 
 ////initilization for http redirection
