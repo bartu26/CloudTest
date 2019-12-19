@@ -42,7 +42,7 @@ var app = express();
 var httpsServer = https.createServer(options, app)
 
 //httpServer.listen(process.env.PORT || 80);
-httpsServer.listen(process.env.PORT);
+httpsServer.listen(process.env.PORT || 443);
 
 var io = require('socket.io').listen(httpsServer);
 
@@ -101,6 +101,7 @@ users = [];
 connections = [];
 
 app.get('/', function (req, res) {
+    res.writeHead(301);
     return res.sendFile(__dirname + '/index.html');
 });
 
