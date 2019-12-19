@@ -1,9 +1,9 @@
 //------------------------------------------------------------------------------
 //old http--------------------------
-var express = require('express');
-var app = express();
-var http = require('http').createServer(app).listen(process.env.PORT || 3000);
-var io = require('socket.io').listen(http);
+//var express = require('express');
+//var app = express();
+//var http = require('http').createServer(app).listen(process.env.PORT || 3000);
+//var io = require('socket.io').listen(http);
 
 var VisualRecognitionV3 = require('watson-developer-cloud/visual-recognition/v3');
 //var fs = require('fs');
@@ -26,19 +26,19 @@ var params = {
 //---HTTPS-TODO--------
 //---------------------
 
-//var express = require('express');
-//var app = express();
-//var https = require('https');
-//var fs = require('fs');
+var express = require('express');
+var app = express();
+var https = require('https');
+var fs = require('fs');
 
-////ssl credentials for https
-//var options = {
-//    key: fs.readFileSync('./key.pem'),
-//    cert: fs.readFileSync('./key-cert.pem')
-//};
+//ssl credentials for https
+var options = {
+    key: fs.readFileSync('./key.pem'),
+    cert: fs.readFileSync('./key-cert.pem')
+};
 
-//var server = https.createServer(options, app).listen(process.env.PORT || 3000);
-//var io = require('socket.io').listen(server);
+var server = https.createServer(options, app).listen(process.env.PORT || 3000);
+var io = require('socket.io').listen(server);
 
 
 ////initilization for http redirection
