@@ -23,7 +23,7 @@ const csp = require('express-csp-header');
 app.use(csp({
     policies: {
         'default-src': [csp.SELF],
-        'script-src': [csp.SELF, csp.INLINE, 'somehost.com'],
+        'script-src': [csp.SELF, 'https://code.jquery.com/jquery-latest.min.js', '/socket.io-file-client.js'],
         'style-src': [csp.SELF, 'mystyles.net'],
         'img-src': ['data:', 'images.com'],
         'worker-src': [csp.NONE],
