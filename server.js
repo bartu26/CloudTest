@@ -41,7 +41,7 @@ app.get('/', function (req, res) {
     return res.sendFile(__dirname + '/index.html');
 });
 
-var server = https.createServer(options, app).listen(process.env.PORT || 443);
+var server = https.createServer(options, app).listen(process.env.PORT || 3000);
 var io = require('socket.io').listen(server);
 
 
@@ -50,7 +50,7 @@ var http = require('http');
 
 //redirecting to https
 http.createServer(function (req, res) {
-    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+    res.writeHead(3000, { "Location": "https://" + req.headers['host'] + req.url });
     res.end();
 }).listen(process.env.PORT || 80);
 
