@@ -22,10 +22,10 @@ var params = {
 const csp = require('express-csp-header');
 app.use(csp({
     policies: {
-        'default-src': [csp.SELF],
-        'script-src': [csp.SELF],
-        'style-src': [csp.SELF],
-        'worker-src': [csp.NONE],
+        'default-src': [csp.SELF, 'https://silly-bose.eu-de.mybluemix.net/'],
+        'script-src': [csp.SELF,'https://silly-bose.eu-de.mybluemix.net/'],
+        'style-src': [csp.SELF,'https://silly-bose.eu-de.mybluemix.net/'],
+        'worker-src': [csp.NONE,'https://silly-bose.eu-de.mybluemix.net/'],
         'block-all-mixed-content': true
     }
 }));
