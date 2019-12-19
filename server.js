@@ -32,7 +32,8 @@ var https = require('https');
 //ssl credentials for https
 var options = {
     key: fs.readFileSync('key.pem', 'utf8'),
-    cert: fs.readFileSync('key-cert.pem', 'utf8')
+    cert: fs.readFileSync('key-cert.pem', 'utf8'),
+    secure:true
 };
 
 var express = require('express');
