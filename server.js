@@ -111,19 +111,19 @@ function dbCloudantConnect() {
     });
 }
 
-var db;
+//let db;
 
-// Initialize the DB when this module is loaded
-(function getDbConnection() {
-    logger.info('Initializing Cloudant connection...', 'items-dao-cloudant.getDbConnection()');
-    utils.dbCloudantConnect().then((database) => {
-        logger.info('Cloudant connection initialized.', 'items-dao-cloudant.getDbConnection()');
-        db = database;
-    }).catch((err) => {
-        logger.error('Error while initializing DB: ' + err.message, 'items-dao-cloudant.getDbConnection()');
-        throw err;
-    });
-})();
+//// Initialize the DB when this module is loaded
+//(function getDbConnection() {
+//    logger.info('Initializing Cloudant connection...', 'items-dao-cloudant.getDbConnection()');
+//    utils.dbCloudantConnect().then((database) => {
+//        logger.info('Cloudant connection initialized.', 'items-dao-cloudant.getDbConnection()');
+//        db = database;
+//    }).catch((err) => {
+//        logger.error('Error while initializing DB: ' + err.message, 'items-dao-cloudant.getDbConnection()');
+//        throw err;
+//    });
+//})();
 
 
 users = [];
